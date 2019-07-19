@@ -1,15 +1,17 @@
 import mysql.connector
 
 class DbCreation:
+    '''database creation'''
     def __init__(self, connection):
         self.db = connection
         self.cursor = self.db.cursor()
 
     def clean_table(self):
+        '''clean tables if already exist'''
         self.cursor.execute("DROP TABLE IF EXISTS product, category, favorite, store")
-        print("Database cleaned")
 
     def create_product_table(self):
+        '''Product table creation'''
         self.cursor.execute("""
                     CREATE TABLE product (
                     id INT(11) AUTO_INCREMENT NOT NULL,
@@ -23,9 +25,9 @@ class DbCreation:
                     PRIMARY KEY (id)
                     );
                     """)
-        print("Product table created")
 
     def create_category_table(self):
+        '''Category table creation'''
         self.cursor.execute("""
             		CREATE TABLE Category (
                     category_id INT(11) AUTO_INCREMENT NOT NULL,
@@ -33,9 +35,9 @@ class DbCreation:
                     PRIMARY KEY (category_id)
                     );
                     """)
-        print("Category table created")
 
     def create_favorite_table(self):
+        '''Favorite table creation'''
         self.cursor.execute("""
                     CREATE TABLE favorite (
                     favorite_id INT(11) AUTO_INCREMENT NOT NULL,
@@ -43,9 +45,9 @@ class DbCreation:
                     PRIMARY KEY (favorite_id)
                     );
                     """)
-        print("Favorite table created")
 
     def db_setting(self):
+        '''Foreign key setting'''
         self.cursor.execute("""
                     ALTER TABLE product ADD CONSTRAINT category_product_fk
                     FOREIGN KEY (category_id)
@@ -62,6 +64,7 @@ class DbCreation:
                     """)
 
     def table_creation(self):
+        '''cleaning and table creation'''
         self.clean_table()
         self.create_product_table()
         self.create_category_table()
@@ -70,13 +73,13 @@ class DbCreation:
 
 
 def main():
+    '''main'''
     connection = mysql.connector.connect(host='localhost',
                                    database='mydb',
                                    user='root',
                                    password='Mysql93')
     create = DbCreation(connection)
     create.table_creation()
-    print(connection)
 
-
+print("Mise à jour de la base de donnée, veuillez patienter...")
 main()

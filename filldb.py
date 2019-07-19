@@ -3,7 +3,7 @@ import mysql.connector
 from createdb import *
 
 class FillDb():
-    '''Fill the database with data from Open Food Fact API'''
+    '''Fill the database with product's data'''
     def __init__(self):
         self.cat_list = ['boissons','produits-laitiers','viandes','desserts','poissons']
         self.nb_pages = 2
@@ -11,14 +11,15 @@ class FillDb():
         self.mycursor = self.connection.cursor(buffered=True,dictionary=True)
 
     def get_category(self):
+        '''fill the database with a list of main category from cat_list'''
         for i in range(len(self.cat_list)):
             sql = "INSERT INTO category (category_name) VALUES(%s)"
             val = (self.cat_list[i],)
             self.mycursor.execute(sql, val)
             self.connection.commit()
-        print(self.cat_list)
 
     def get_product(self):
+        '''fill the database with product's data from Open Food Facts API '''
         url_off = "https://fr.openfoodfacts.org/categorie/"
         for cat in self.cat_list:
             category_name = cat
@@ -51,25 +52,25 @@ class FillDb():
                         # print("information manquante")
                         continue
                 page += 1
-                print(page)
         nutrigrade_letter = ['a', 'b', 'c', 'd', 'e']
         for number, letter in enumerate(nutrigrade_letter, 1):
-            print(number, letter)
             self.mycursor.execute(
                 "UPDATE product SET nutrigrade = REPLACE(nutrigrade, '{}', '{}') WHERE nutrigrade LIKE '{}'".format(
                     letter, number, letter))
             self.connection.commit()
+        self.mycursor.execute(
+            "UPDATE product SET nutrigrade = REPLACE(name, '/'', '') WHERE nutrigrade LIKE '{}'".format(
+                letter, number, letter))
+        self.connection.commit()
 
 
 
-# def main():
 
 FillDb = FillDb()
 FillDb.get_category()
 FillDb.get_product()
 
-# if __name__ == "__main__":
-#     main()
+
 
 
 
