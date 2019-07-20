@@ -16,6 +16,7 @@ effectué dans la table « favorite »
 Librairies prérequises : 
 - requests
 - mysql.connector
+
 Exécuter le fichier Menu.py afin de créer la base de donnée, la remplir, et démarrer le programme.
 La quantité d'informations et les catégories récoltées sur l'API peuvent être parametrés dans Filldb.py
 
